@@ -179,7 +179,7 @@ def Print_Description():
     '''
     print "DESCRIPTION"
     print "-----------"
-    a='''G4_analysis.py is used for calculate the rise and twist of two G-quartet layers.
+    a='''G4_analysis.py is used for calculating the rise and twist of two G-quartet layers.
 Usage:
     interactive format:
     using -o result.xvg
