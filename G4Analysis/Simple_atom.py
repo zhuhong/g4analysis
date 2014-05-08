@@ -36,7 +36,7 @@ def Get_Atom_in_residue(atom_list,resid):
     '''
     ls = []
     for atom in atom_list:
-        if atom.residue_serial == resid:
+        if atom.residue_id == resid:
             ls.append(atom)
     return ls
 
@@ -67,9 +67,9 @@ def Get_atom_list(filename,crd_file=""):
                 atom_coor_x=atom.atom_coor_x,\
                 atom_coor_y=atom.atom_coor_y,\
                 atom_coor_z=atom.atom_coor_z)
-        simple.atom_id = ii
+        simple.atom_id = ii+1
         if ii == 0:
-            simple.residue_id = 0
+            simple.residue_id = 1
         elif simple.residue_serial == simple_list[-1].residue_serial:
             simple.residue_id = simple_list[-1].residue_id
         else:
@@ -149,7 +149,7 @@ def Get_Residue_list(atom_list):
     '''
     for atom in atom_list:
         # print atom.residue_id,
-        if atom.residue_id > len(seg_list) -1:
+        if atom.residue_id > len(seg_list):
             seg_list.append([atom.residue_name,atom.residue_serial])
     return seg_list
 
@@ -162,7 +162,7 @@ def Get_residue(coor_file,show=True):
     chain=[]
     for ii,reside in enumerate(reside_list):
         if reside[0] in atomlib.RESIDUE_NAME_LIST:
-            chain.append([ii,reside])  
+            chain.append([ii+1,reside])  
         else:
             pass
     if show== True:

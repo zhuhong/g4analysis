@@ -37,7 +37,7 @@ def Get_parm_fromTRJ(traj_file, coor_file, base_list_1, base_list_2, output_name
     if len(output_name)!=LIST_NUM:
         print "ERROR: The number of the output file not match the size of the base list."
 
-    Atom_list=Simple_atom.Get_Simple_atom_list(coor_file)
+    Atom_list=Simple_atom.Get_atom_list(coor_file)
     residue_list=Simple_atom.Get_Residue_list(Atom_list)
 
     base_name_list_1=list()
@@ -76,27 +76,19 @@ def Get_parm_fromTRJ(traj_file, coor_file, base_list_1, base_list_2, output_name
 
         temp_list=list()
         for m in base_list_1[i]:
-            for n in residue_list:
-                if n[1]==m:
-                    temp_list.append(n)
-                    break
-                else:
-                    pass
+            temp_list.append(residue_list[m-1])
         base_name_list_1.append(temp_list)
+        # base_name_list_1.append(residue_list[m-1])
 
         temp_list=list()
         for m in base_list_2[i]:
-            for n in residue_list:
-                if n[1]==m:
-                    temp_list.append(n)
-                    break
-                else:
-                    pass
+            temp_list.append(residue_list[m-1])
         base_name_list_2.append(temp_list)
 
 
         base_atom_list_1.append([DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_1[i]])
         base_atom_list_2.append([DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_2[i]])
+        # print base_atom_list_1
 
 
     u=MDAnalysis.Universe(coor_file,traj_file)
@@ -165,9 +157,10 @@ def Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=Tru
     get pair parameters from coor_file
     '''
 
-    Atom_list=Simple_atom.Get_Simple_atom_list(coor_file)
-    residue_list=Simple_atom.Get_Residue_list(Atom_list)
     atom_list=Simple_atom.Get_atom_list(coor_file)
+    residue_list=Simple_atom.Get_Residue_list(atom_list)
+    # print residue_list
+    # atom_list=Simple_atom.Get_atom_list(coor_file)
 
     base_name_list_1=list()
     base_name_list_2=list()
@@ -175,23 +168,17 @@ def Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=Tru
     base_atom_list_2=list()
 
     for m in base_list_1:
-        for n in residue_list:
-            if n[1]==m:
-                base_name_list_1.append(n)
-                break
-            else:
-                pass
+        # for n in residue_list:
+        #     if n[1]==m:
+        base_name_list_1.append(residue_list[m-1])
+
+    # print base_name_list_1
 
     for m in base_list_2:
-        for n in residue_list:
-            if n[1]==m:
-                base_name_list_2.append(n)
-                break
-            else:
-                pass
+        base_name_list_2.append(residue_list[m-1])
 
-    base_atom_list_1=[DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_1]
-    base_atom_list_2=[DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_2]
+    base_atom_list_1=[DNA_matrix.Get_baseID_list(atom_list,j) for j in base_list_1]
+    base_atom_list_2=[DNA_matrix.Get_baseID_list(atom_list,j) for j in base_list_2]
 
     r1=[]
     '''the group 1 rotate list'''
@@ -202,7 +189,7 @@ def Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=Tru
     c2=[]
     '''the group 2 coordinate list'''
     for m in range(len(base_name_list_1)):
-        temp_list = [ [atom_list[x].atom_coor_x*10, atom_list[x].atom_coor_y*10,atom_list[x].atom_coor_z*10] \
+        temp_list = [ [atom_list[x-1].atom_coor_x*10, atom_list[x-1].atom_coor_y*10,atom_list[x-1].atom_coor_z*10] \
                 for x in base_atom_list_1[m] ]
 #        print temp_list
         result = DNA_matrix.Get_rotate_matrix(numpy.array(temp_list), base_name_list_1[m][0])
@@ -210,7 +197,7 @@ def Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=Tru
         c1.append(result[1])
 
     for m in range(len(base_name_list_2)):
-        temp_list = [ [atom_list[x].atom_coor_x*10, atom_list[x].atom_coor_y*10,atom_list[x].atom_coor_z*10] \
+        temp_list = [ [atom_list[x-1].atom_coor_x*10, atom_list[x-1].atom_coor_y*10,atom_list[x-1].atom_coor_z*10] \
                 for x in base_atom_list_2[m] ]
 #        print temp_list
         result = DNA_matrix.Get_rotate_matrix(numpy.array(temp_list), base_name_list_2[m][0])
@@ -242,7 +229,7 @@ def Get_Dihedral_fromTOP( coor_file, base_list_1,PRINT=False ):
     reside_list=Simple_atom.Get_Residue_list(Atom_list)
 
     if PRINT == True:
-        print "%8s%10s%10s%10s%10s%10s%10s%10s%8s%8s%8s%8s%8s%8s%8s"\
+        print "%11s%10s%10s%10s%10s%10s%10s%10s%8s%8s%8s%8s%8s%8s%8s"\
                 %("baseID","alpha","beta","gamma","delta","epslon","zeta","chi",\
                 "alpha","beta","gamma","delta","epslon","zeta","chi")
 
@@ -250,7 +237,7 @@ def Get_Dihedral_fromTOP( coor_file, base_list_1,PRINT=False ):
         resu=DNA_param.Get_Dihedral(Atom_list,m)   
 
         if PRINT == True:
-            print "%8d" %reside_list[m][1],
+            print "%8d%3s" %(reside_list[m-1][1],reside_list[m-1][0]),
             for i in range(7):
                 if resu[i]=="-":
                     print "%9s" %("-"*4), 

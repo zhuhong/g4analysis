@@ -48,6 +48,7 @@ def Usage(coor_file="coor_file",traj_file="traj_file",output_file="output_file",
     usage.Type_input()
     usage.Print_line()
     usage.Show("--helical","bool",calcu_helical,"Calculate the helical parameters of nucleic acids.")
+    # usage.Show("--helical-step","bool",calcu_helical,"Calculate the step helical parameters of nucleic acids.")
     usage.Show("--dihedral","bool",calcu_dihedral,"Calculate the backbone dihedral parameters of nucleic acids.")
     usage.Show("--rise","bool",calcu_rise,"Calculate the distance of DNA bases groups.")
     usage.Show("--twist","bool",calcu_twist,"Calculate the twist of DNA bases groups.")
@@ -310,9 +311,43 @@ if __name__=="__main__":
 # step 5, calculating the helical parameters.
     if resu["calcu_helical"]==True:
         if have_parm_file:
-            pass
+            fp=open(resu["parm_file"])
+            lines=fp.readlines()
+            for line in lines:
+                if len(line) < 3:
+                    continue 
+                [group1,group2,outputname]=line.split()
+                g1=group1.split(":")
+                g2=group2.split(":")
+                if len(g1) == len(g2) ==2:
+                    CALCU = "step"
+                elif len(g1) == len(g2) ==1:
+                    CALCU = "pair"
+                list_group_1.append([int(i) for i in g1])
+                list_group_2.append([int(i) for i in g2])
+                list_output.append(outputname)
+                
+            DNA_analysis.Get_parm_fromTRJ(resu["traj_file"],resu["coor_file"],list_group_1,list_group_2,list_output,\
+                CALCU,skip=resu["skip"], dt=1,begin=resu["begin"],end=resu["end"])            
 
-    Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=True)
+        else:
+            l1= Simple_atom.Get_residue(resu["coor_file"],True)
+            l2= Simple_atom.Get_residue(resu["coor_file"],False)
+            list_group_1.append(l1)
+            list_group_2.append(l2)
+            if len(l1) == len(l2) ==2:
+                CALCU = "step"
+            elif len(l1) == len(l1) ==1:
+                CALCU = "pair"
+
+            if resu["traj_file"]=="":
+                DNA_analysis.Get_para_fromTOP(resu["coor_file"], list_group_1[0],list_group_2[0],CALCU,PRINT=True)
+            else:
+                list_output.append(resu["output_file"])
+                DNA_analysis.Get_parm_fromTRJ(resu["traj_file"],resu["coor_file"],list_group_1,list_group_2,list_output,\
+                    CALCU,skip=resu["skip"], dt=1,begin=resu["begin"],end=resu["end"])
+
+    
 
 # step 6, calculating the dihedral parameters.
     if resu["calcu_dihedral"]==True:
@@ -324,7 +359,7 @@ if __name__=="__main__":
             chain=list()
             for ii,residue in enumerate(reside_list):
                 if residue[0] in atomlib.RESIDUE_NAME_LIST:
-                    chain.append(ii)
+                    chain.append(ii+1)
                 else:
                     pass
             # print chain

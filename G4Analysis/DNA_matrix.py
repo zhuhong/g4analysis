@@ -80,17 +80,17 @@ def Get_group_rotmat(group_rotate_list,group_size):
 
     return z_axis,origin
 
-def Get_baseID_list(atom_list,base_serial):
+def Get_baseID_list(atom_list,base_id):
 
-    atom_list = Simple_atom.Get_Atom_in_residue(atom_list, base_serial)
+    atom_list = Simple_atom.Get_Atom_in_residue(atom_list, base_id)
     temp_atom_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     for atom in atom_list:
         if ("G" in atom.residue_name ) or ("A" in atom.residue_name):
             if atom.atom_name in atomlib.BASE_AG_LIST:
-                temp_atom_list[atomlib.BASE_AG_LIST.index(atom.atom_name)] = atom.atom_serial
+                temp_atom_list[atomlib.BASE_AG_LIST.index(atom.atom_name)] = atom.atom_id
         elif ("C" in atom.residue_name ) or ("T" in atom.residue_name) or ("U" in atom.residue_name):
             if atom.atom_name in atomlib.BASE_CTU_LIST:
-                temp_atom_list[atomlib.BASE_CTU_LIST.index(atom.atom_name)] = atom.atom_serial
+                temp_atom_list[atomlib.BASE_CTU_LIST.index(atom.atom_name)] = atom.atom_id
         else:
             print "the base", atom.residue_name, " not supposed."
     if temp_atom_list[6]==0:
