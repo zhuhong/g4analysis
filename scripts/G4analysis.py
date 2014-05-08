@@ -371,6 +371,8 @@ if __name__=="__main__":
             fp=open(resu["parm_file"])
             lines=fp.readlines()
             for line in lines:
+                if len(line) < 3:
+                    continue
                 [group1,outputname]=line.split()
                 list_group_1.append(int(group1))
                 list_output.append(outputname)
