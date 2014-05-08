@@ -14,12 +14,15 @@ class unit_atom():
     '''
     It's a simple atom class. 
     '''
-    def __init__(self,atom_name="",atom_serial=0,residue_name="",\
-            residue_serial=0,atom_coor_x=0.0,atom_coor_y=0.0,atom_coor_z=0.0):
+    def __init__(self,atom_name="",atom_serial=1, atom_id =0, \
+        residue_name="", residue_id = 0, residue_serial=1, \
+        atom_coor_x=0.0,atom_coor_y=0.0,atom_coor_z=0.0):
         self.atom_name=atom_name
         self.atom_serial=atom_serial
+        self.atom_id = atom_id  # this one is from zero.
         self.residue_name=residue_name
         self.residue_serial=residue_serial
+        self.residue_id = residue_id #  this one is from zero.
         self.atom_coor_x=atom_coor_x
         self.atom_coor_y=atom_coor_y
         self.atom_coor_z=atom_coor_z

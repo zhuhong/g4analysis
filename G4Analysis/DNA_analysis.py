@@ -239,6 +239,7 @@ def Get_Dihedral_fromTOP( coor_file, base_list_1,PRINT=False ):
 
     '''
     Atom_list=Simple_atom.Get_atom_list(coor_file)
+    reside_list=Simple_atom.Get_Residue_list(Atom_list)
 
     if PRINT == True:
         print "%8s%10s%10s%10s%10s%10s%10s%10s%8s%8s%8s%8s%8s%8s%8s"\
@@ -249,7 +250,7 @@ def Get_Dihedral_fromTOP( coor_file, base_list_1,PRINT=False ):
         resu=DNA_param.Get_Dihedral(Atom_list,m)   
 
         if PRINT == True:
-            print "%8d" %m,
+            print "%8d" %reside_list[m][1],
             for i in range(7):
                 if resu[i]=="-":
                     print "%9s" %("-"*4), 
@@ -315,10 +316,10 @@ def Get_Dihedral_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1, dt
                 break
 
         if ts.frame % skip == 0 :
-            for i in Atom_list:
-                Atom_list[i].atom_coor_x=ts._x[i-1]
-                Atom_list[i].atom_coor_y=ts._y[i-1]
-                Atom_list[i].atom_coor_z=ts._z[i-1]
+            for atom in Atom_list:
+                atom.atom_coor_x=ts._x[atom.atom_id]
+                atom.atom_coor_y=ts._y[atom.atom_id]
+                atom.atom_coor_z=ts._z[atom.atom_id]
 
 
             for i in range(len(base_list)):

@@ -224,54 +224,55 @@ def Calc_dihedral(atom1, atom2, atom3, atom4):
 
 
 
-def Get_Dihedral(Atom_list, base_serial):
+def Get_Dihedral(Atom_list, base_id):
     '''
     calculate the dihedral from the top file.
 
     '''
 
-    for i in Atom_list:
-  #      print Atom_list[i].atom_name
-        if Atom_list[i].atom_name   in ["O3'","O3*"] and Atom_list[i].residue_serial==base_serial-1: 
-            index_O3_0=i
 
-        elif Atom_list[i].atom_name in ["P","H5T"]   and Atom_list[i].residue_serial==base_serial:
-            index_P=i
+    for atom in Atom_list:
+  #      print atom.atom_name
+        if atom.atom_name   in ["O3'","O3*"] and atom.residue_id ==base_id-1: 
+            index_O3_0=atom.atom_id
 
-        elif Atom_list[i].atom_name in ["O5'","O5*"] and Atom_list[i].residue_serial==base_serial:
-            index_O5=i
-        elif Atom_list[i].atom_name in ["C5'","C5*"] and Atom_list[i].residue_serial==base_serial:
-            index_C5=i
-        elif Atom_list[i].atom_name in ["C4'","C4*"] and Atom_list[i].residue_serial==base_serial:
-            index_C4=i
-        elif Atom_list[i].atom_name in ["C3'","C3*"] and Atom_list[i].residue_serial==base_serial:
-            index_C3=i
-        elif Atom_list[i].atom_name in ["O3'","O3*"] and Atom_list[i].residue_serial==base_serial:
-            index_O3=i
+        elif atom.atom_name in ["P","H5T"]   and atom.residue_id==base_id:
+            index_P=atom.atom_id
 
-        elif Atom_list[i].atom_name in ["P","H3T"]   and Atom_list[i].residue_serial==base_serial+1:
-            index_P_2=i
-        elif Atom_list[i].atom_name in ["O5'","O5*"] and Atom_list[i].residue_serial==base_serial+1:
-            index_O5_2=i
+        elif atom.atom_name in ["O5'","O5*"] and atom.residue_id==base_id:
+            index_O5=atom.atom_id
+        elif atom.atom_name in ["C5'","C5*"] and atom.residue_id==base_id:
+            index_C5=atom.atom_id
+        elif atom.atom_name in ["C4'","C4*"] and atom.residue_id==base_id:
+            index_C4=atom.atom_id
+        elif atom.atom_name in ["C3'","C3*"] and atom.residue_id==base_id:
+            index_C3=atom.atom_id
+        elif atom.atom_name in ["O3'","O3*"] and atom.residue_id==base_id:
+            index_O3=atom.atom_id
 
-        elif Atom_list[i].atom_name in ["O4'","O4*"] and Atom_list[i].residue_serial==base_serial:
-            index_O4=i
+        elif atom.atom_name in ["P","H3T"]   and atom.residue_id==base_id+1:
+            index_P_2=atom.atom_id
+        elif atom.atom_name in ["O5'","O5*"] and atom.residue_id==base_id+1:
+            index_O5_2=atom.atom_id
 
-        elif Atom_list[i].atom_name in ["C1'","C1*"] and Atom_list[i].residue_serial==base_serial:
-            index_C1=i
+        elif atom.atom_name in ["O4'","O4*"] and atom.residue_id==base_id:
+            index_O4=atom.atom_id
 
-        elif Atom_list[i].atom_name in ["N9"] and Atom_list[i].residue_serial==base_serial and \
-                ("A" in Atom_list[i].residue_name or "G" in Atom_list[i].residue_name):
-            index_N_base=i
-        elif Atom_list[i].atom_name=="N1" and Atom_list[i].residue_serial==base_serial and \
-                ("C" in Atom_list[i].residue_name or "T" in Atom_list[i].residue_name):
-            index_N_base=i
-        elif Atom_list[i].atom_name=="C4" and Atom_list[i].residue_serial==base_serial and \
-                ("A" in Atom_list[i].residue_name or "G" in Atom_list[i].residue_name):
-            index_C_base=i
-        elif Atom_list[i].atom_name=="C2" and Atom_list[i].residue_serial==base_serial and \
-                ("C" in Atom_list[i].residue_name or "T" in Atom_list[i].residue_name):
-            index_C_base=i
+        elif atom.atom_name in ["C1'","C1*"] and atom.residue_id==base_id:
+            index_C1=atom.atom_id
+
+        elif atom.atom_name in ["N9"] and atom.residue_id==base_id and \
+                ("A" in atom.residue_name or "G" in atom.residue_name):
+            index_N_base=atom.atom_id
+        elif atom.atom_name=="N1" and atom.residue_id==base_id and \
+                ("C" in atom.residue_name or "T" in atom.residue_name):
+            index_N_base=atom.atom_id
+        elif atom.atom_name=="C4" and atom.residue_id==base_id and \
+                ("A" in atom.residue_name or "G" in atom.residue_name):
+            index_C_base=atom.atom_id
+        elif atom.atom_name=="C2" and atom.residue_id==base_id and \
+                ("C" in atom.residue_name or "T" in atom.residue_name):
+            index_C_base=atom.atom_id
 
     dihedral=dict()
 

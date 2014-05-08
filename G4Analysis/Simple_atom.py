@@ -40,11 +40,11 @@ def Get_Atom_in_residue(atom_list,resid):
             ls.append(atom)
     return ls
 
-def Get_Simple_atom_list(filename,crd_file=""):
+def Get_atom_list(filename,crd_file=""):
     '''
     Read in a structure file like pdb,gro. return a Simple_atom class list.
     '''
-    atom_list=[]
+    # atom_list=[]
     if filename.endswith(".pdb"):
         atom_list=PDB.Get_Atom_list(filename)
     elif filename.endswith(".gro"):
@@ -59,7 +59,7 @@ def Get_Simple_atom_list(filename,crd_file=""):
         return []
 
     simple_list=[]
-    for atom in atom_list:
+    for ii,atom in enumerate(atom_list):
         simple=unit_atom.unit_atom(atom_name=atom.atom_name,\
                 atom_serial=atom.atom_serial,\
                 residue_name=atom.residue_name,\
@@ -67,42 +67,49 @@ def Get_Simple_atom_list(filename,crd_file=""):
                 atom_coor_x=atom.atom_coor_x,\
                 atom_coor_y=atom.atom_coor_y,\
                 atom_coor_z=atom.atom_coor_z)
+        simple.atom_id = ii
+        if ii == 0:
+            simple.residue_id = 0
+        elif simple.residue_serial == simple_list[-1].residue_serial:
+            simple.residue_id = simple_list[-1].residue_id
+        else:
+            simple.residue_id = simple_list[-1].residue_id +1
         simple_list.append(simple)
 
     return simple_list
 
-def Get_atom_list(filename,crd_file=""):
-    '''
-    Read in a structure file like pdb,gro. return a Simple_atom class dict.
-    rewrite from Get_Simple_atom_list, use dict but not list. for the bug
-    which may happen when the atom serial in pdb file not start from 1.
-    '''
-    atom_list=list()
-    if filename.endswith(".pdb"):
-        atom_list=PDB.Get_Atom_list(filename)
-    elif filename.endswith(".gro"):
-        atom_list=GRO.Get_Atom_list(filename)
-    elif filename.endswith(".top"):
-        if crd_file == "":
-            atom_list=amber_top.Read_top(filename)
-        else:
-            atom_list=amber_top.Read_crd(filename,crd_file)
-    else:
-        print "file name %s in invalid." %filename
-        return []
+# def Get_atom_list(filename,crd_file=""):
+#     '''
+#     Read in a structure file like pdb,gro. return a Simple_atom class dict.
+#     rewrite from Get_Simple_atom_list, use dict but not list. for the bug
+#     which may happen when the atom serial in pdb file not start from 1.
+#     '''
+#     atom_list=list()
+#     if filename.endswith(".pdb"):
+#         atom_list=PDB.Get_Atom_list(filename)
+#     elif filename.endswith(".gro"):
+#         atom_list=GRO.Get_Atom_list(filename)
+#     elif filename.endswith(".top"):
+#         if crd_file == "":
+#             atom_list=amber_top.Read_top(filename)
+#         else:
+#             atom_list=amber_top.Read_crd(filename,crd_file)
+#     else:
+#         print "file name %s in invalid." %filename
+#         return []
 
-    simple_list=dict()
-    for atom in atom_list:
-        simple=unit_atom.unit_atom(atom_name=atom.atom_name,\
-                atom_serial=atom.atom_serial,\
-                residue_name=atom.residue_name,\
-                residue_serial=atom.residue_serial,\
-                atom_coor_x=atom.atom_coor_x,\
-                atom_coor_y=atom.atom_coor_y,\
-                atom_coor_z=atom.atom_coor_z)
-        simple_list[simple.atom_serial]=simple
+#     simple_list=dict()
+#     for atom in atom_list:
+#         simple=unit_atom.unit_atom(atom_name=atom.atom_name,\
+#                 atom_serial=atom.atom_serial,\
+#                 residue_name=atom.residue_name,\
+#                 residue_serial=atom.residue_serial,\
+#                 atom_coor_x=atom.atom_coor_x,\
+#                 atom_coor_y=atom.atom_coor_y,\
+#                 atom_coor_z=atom.atom_coor_z)
+#         simple_list[simple.atom_serial]=simple
 
-    return simple_list
+#     return simple_list
 
 
 
@@ -141,7 +148,8 @@ def Get_Residue_list(atom_list):
     seg_list=[residue_name,residue_serial]
     '''
     for atom in atom_list:
-        if atom.residue_serial != seg_list[-1][1]:
+        # print atom.residue_id,
+        if atom.residue_id > len(seg_list) -1:
             seg_list.append([atom.residue_name,atom.residue_serial])
     return seg_list
 
@@ -149,17 +157,17 @@ def Get_residue(coor_file,show=True):
     '''
     Get_residue is rewrite from Get_list. 
     '''
-    atom_list=Get_Simple_atom_list(coor_file)
+    atom_list=Get_atom_list(coor_file)
     reside_list=Get_Residue_list(atom_list)
     chain=[]
-    for reside in reside_list:
+    for ii,reside in enumerate(reside_list):
         if reside[0] in atomlib.RESIDUE_NAME_LIST:
-            chain.append(reside)  
+            chain.append([ii,reside])  
         else:
             pass
     if show== True:
         for ca in chain:
-            print "%4d\t (%8s )" % (ca[1],ca[0])
+            print "%4d\t (  %6d  %8s )" % (ca[0], ca[1][1],ca[1][0])
 
     while True:
         list1=raw_input("Choose the reside numbers for the group (like 1 2 3 4):")
@@ -167,7 +175,7 @@ def Get_residue(coor_file,show=True):
         numlist1=[]
         for aa in list1:
             numlist1.append(int(aa))
-        if max(numlist1) > reside_list[-1][1]:
+        if max(numlist1) > len(reside_list):
             print "base number %d is out of range." %max(numlist1) 
             continue
         else:

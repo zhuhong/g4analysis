@@ -195,7 +195,7 @@ if __name__=="__main__":
     Print_ProgInfo()
     argc=len(sys.argv)
     resu=Check_argv(sys.argv)
-    is_get_dt=False
+    # is_get_dt=False
     have_parm_file=os.path.isfile(resu["parm_file"])
 
     list_group_1=list()
@@ -204,9 +204,9 @@ if __name__=="__main__":
 
 
 # step 1, get the dt information of the trajectory.
-    if resu["traj_file"].endswith("mdcrd") or resu["traj_file"].endswith("dcd"):
-        dt=raw_input("Input the time step between frames for Amber trajectory file (ps).")
-        is_get_dt=True
+    # if resu["traj_file"].endswith("mdcrd") or resu["traj_file"].endswith("dcd"):
+    #     dt=raw_input("Input the time step between frames for Amber trajectory file (ps).")
+    #     is_get_dt=True
 
 # step 2, calculatin the rise paramters.
     if resu["calcu_rise"]==True:
@@ -245,14 +245,11 @@ if __name__=="__main__":
             list_group_2.append(l2)
             list_output.append(resu["output_file"])
 
-        if is_get_dt:
-            G4_rise.Get_rise_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_group_2,list_output,resu["skip"],float(dt),\
-                    resu["begin"],resu["end"])
-        else:
-            G4_rise.Get_rise_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_group_2,list_output,resu["skip"],\
-                    begin=resu["begin"],end=resu["end"])
+
+    
+        G4_rise.Get_rise_fromTRJ(resu["traj_file"],resu["coor_file"],\
+                list_group_1,list_group_2,list_output,resu["skip"],\
+                begin=resu["begin"],end=resu["end"])
 
 # step 3, calculating the twise paramters.
     if resu["calcu_twist"]==True:
@@ -283,14 +280,10 @@ if __name__=="__main__":
             list_group_2.append(l2)
             list_output.append(resu["output_file"])
 
-        if is_get_dt:
-            G4_twist.Get_twist_in_GDNA2(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_group_2,list_output,resu["skip"],float(dt),\
-                    resu["begin"],resu["end"])
-        else:
-            G4_twist.Get_twist_in_GDNA2(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_group_2,list_output,resu["skip"],\
-                    begin=resu["begin"],end=resu["end"])
+
+        G4_twist.Get_twist_in_GDNA2(resu["traj_file"],resu["coor_file"],\
+                list_group_1,list_group_2,list_output,resu["skip"],\
+                begin=resu["begin"],end=resu["end"])
 
 #step 4, calculating the rmsd parameters.
     if resu["calcu_rmsd"]==True:
@@ -308,32 +301,33 @@ if __name__=="__main__":
             list_group_1.append(l1)
             list_output.append(resu["output_file"])
 
-        if is_get_dt:
-            G4_rise.Get_RMSD_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_output,resu["skip"],float(dt),\
-                    resu["begin"],resu["end"])
-        else:
-            print list_output
-            G4_rise.Get_RMSD_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1,list_output,resu["skip"],\
-                    begin=resu["begin"],end=resu["end"])
+
+        print list_output
+        G4_rise.Get_RMSD_fromTRJ(resu["traj_file"],resu["coor_file"],\
+                list_group_1,list_output,resu["skip"],\
+                begin=resu["begin"],end=resu["end"])
 
 # step 5, calculating the helical parameters.
     if resu["calcu_helical"]==True:
         if have_parm_file:
             pass
 
+    Get_para_fromTOP( coor_file, base_list_1, base_list_2,CALCU="step",PRINT=True)
+
 # step 6, calculating the dihedral parameters.
     if resu["calcu_dihedral"]==True:
         if resu["traj_file"]=="":
-            atom_list=Simple_atom.Get_Simple_atom_list(resu["coor_file"])
+            atom_list=Simple_atom.Get_atom_list(resu["coor_file"])
+            # Simple_atom.Save_file("ttt_temp.pdb",atom_list)
+            # sys.exit()
             reside_list=Simple_atom.Get_Residue_list(atom_list)
             chain=list()
-            for residue in reside_list:
+            for ii,residue in enumerate(reside_list):
                 if residue[0] in atomlib.RESIDUE_NAME_LIST:
-                    chain.append(residue[1])
+                    chain.append(ii)
                 else:
                     pass
+            # print chain
 
             DNA_analysis.Get_Dihedral_fromTOP(resu["coor_file"],chain,True)
             sys.exit(0)
@@ -351,12 +345,8 @@ if __name__=="__main__":
             list_group_1=l1
             list_output.append(resu["output_file"])
 
-        if is_get_dt:
-            DNA_analysis.Get_Dihedral_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1, list_output,resu["skip"],float(dt),resu["begin"],resu["end"])
 
-        else:
-            DNA_analysis.Get_Dihedral_fromTRJ(resu["traj_file"],resu["coor_file"],\
-                    list_group_1, list_output,resu["skip"],begin=resu["begin"],end=resu["end"])
+        DNA_analysis.Get_Dihedral_fromTRJ(resu["traj_file"],resu["coor_file"],\
+                list_group_1, list_output,resu["skip"],begin=resu["begin"],end=resu["end"])
 
 
