@@ -275,7 +275,7 @@ def Get_Dihedral_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1, dt
 
         fp = open(file_name, 'w')
         fp.write("#Residue Index: ")
-        print base_list[output_name.index(file_name)]
+        # print base_list[output_name.index(file_name)]
         fp.write("%d\n" %base_list[output_name.index(file_name)])
         fp.write("#skip:%d\n" %skip)
 
@@ -304,9 +304,9 @@ def Get_Dihedral_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1, dt
 
         if ts.frame % skip == 0 :
             for atom in Atom_list:
-                atom.atom_coor_x=ts._x[atom.atom_id]
-                atom.atom_coor_y=ts._y[atom.atom_id]
-                atom.atom_coor_z=ts._z[atom.atom_id]
+                atom.atom_coor_x=ts._x[atom.atom_id-1]
+                atom.atom_coor_y=ts._y[atom.atom_id-1]
+                atom.atom_coor_z=ts._z[atom.atom_id-1]
 
 
             for i in range(len(base_list)):
