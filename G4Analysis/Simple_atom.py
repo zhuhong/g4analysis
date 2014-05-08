@@ -141,7 +141,7 @@ def Get_Residue_list(atom_list):
     seg_list=[residue_name,residue_serial]
     '''
     for atom in atom_list:
-        if atom.residue_serial > seg_list[-1][1]:
+        if atom.residue_serial != seg_list[-1][1]:
             seg_list.append([atom.residue_name,atom.residue_serial])
     return seg_list
 
