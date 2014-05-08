@@ -24,7 +24,8 @@ RESIDUE_NAME_LIST=['A','T','C','G',\
         'DA3','DT3','DC3','DG3',\
         'RA','RT','RC','RG',\
         'RA5','RT5','RC5','RG5',\
-        'RA3','RT3','RC3','RG3']
+        'RA3','RT3','RC3','RG3',\
+        'ADE','CYT','THY','GUA']
 '''
 just for nucleic now. pretein residue can be append if need.
 '''
