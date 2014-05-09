@@ -215,7 +215,7 @@ if __name__=="__main__":
             l1=Simple_atom.Get_residue(resu["coor_file"],True)
             l2=Simple_atom.Get_residue(resu["coor_file"],False)
 
-            G4_rise.Get_parallel_fromTOP(resu["coor_file"],l1,l2)
+            G4_rise.Get_rise_fromTOP(resu["coor_file"],l1,l2)
             sys.exit()
             
         if have_parm_file:

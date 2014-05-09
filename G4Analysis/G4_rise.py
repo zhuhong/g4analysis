@@ -58,7 +58,7 @@ def Get_rise_fromTRJ(traj_file, coor_file, base_list_1, base_list_2, output_name
     START_TIME=Time.time()
     LIST_NUM=len(base_list_1)
 
-    Atom_list=Simple_atom.Get_Simple_atom_list(coor_file)
+    Atom_list=Simple_atom.Get_atom_list(coor_file)
     residue_list=Simple_atom.Get_Residue_list(Atom_list)
 
     base_name_list_1=list()
@@ -94,24 +94,15 @@ def Get_rise_fromTRJ(traj_file, coor_file, base_list_1, base_list_2, output_name
 
         temp_list=list()
         for m in base_list_1[i]:
-            for n in residue_list:
-                if n[1]==m:
-                    temp_list.append(n)
-                    break
-                else:
-                    pass
+            temp_list.append(residue_list[m-1])
+
         base_name_list_1.append(temp_list)
 
         temp_list=list()
         for m in base_list_2[i]:
-            for n in residue_list:
-                if n[1]==m:
-                    temp_list.append(n)
-                    break
-                else:
-                    pass
-        base_name_list_2.append(temp_list)
+            temp_list.append(residue_list[m-1])
 
+        base_name_list_2.append(temp_list)
 
         base_atom_list_1.append([DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_1[i]])
         base_atom_list_2.append([DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_2[i]])
@@ -202,9 +193,9 @@ def Get_rise_fromTOP( coor_file, base_list_1, base_list_2):
 #    if coor_file.endswith('.top'):
 #        Atom_list=amber_top
 
-    Atom_list=Simple_atom.Get_Simple_atom_list(coor_file)
-    residue_list=Simple_atom.Get_Residue_list(Atom_list)
     atom_list=Simple_atom.Get_atom_list(coor_file)
+    residue_list=Simple_atom.Get_Residue_list(atom_list)
+    # atom_list=Simple_atom.Get_atom_list(coor_file)
 
     base_name_list_1=list()
     base_name_list_2=list()
@@ -212,23 +203,13 @@ def Get_rise_fromTOP( coor_file, base_list_1, base_list_2):
     base_atom_list_2=list()
 
     for m in base_list_1:
-        for n in residue_list:
-            if n[1]==m:
-                base_name_list_1.append(n)
-                break
-            else:
-                pass
+        base_name_list_1.append(residue_list[m-1])
 
     for m in base_list_2:
-        for n in residue_list:
-            if n[1]==m:
-                base_name_list_2.append(n)
-                break
-            else:
-                pass
+        base_name_list_2.append(residue_list[m-1])
 
-    base_atom_list_1=[DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_1]
-    base_atom_list_2=[DNA_matrix.Get_baseID_list(Atom_list,j) for j in base_list_2]
+    base_atom_list_1=[DNA_matrix.Get_baseID_list(atom_list,j) for j in base_list_1]
+    base_atom_list_2=[DNA_matrix.Get_baseID_list(atom_list,j) for j in base_list_2]
 
 #    print base_atom_list_1
 #    print base_atom_list_2
@@ -243,7 +224,7 @@ def Get_rise_fromTOP( coor_file, base_list_1, base_list_2):
     c2=[]
     '''the group 2 coordinate list'''
     for m in range(len(base_name_list_1)):
-        temp_list = [ [atom_list[x].atom_coor_x*10, atom_list[x].atom_coor_y*10,atom_list[x].atom_coor_z*10] \
+        temp_list = [ [atom_list[x-1].atom_coor_x*10, atom_list[x-1].atom_coor_y*10,atom_list[x-1].atom_coor_z*10] \
                 for x in base_atom_list_1[m] ]
 #        print temp_list
         result = DNA_matrix.Get_rotate_matrix(numpy.array(temp_list), base_name_list_1[m][0])
@@ -251,7 +232,7 @@ def Get_rise_fromTOP( coor_file, base_list_1, base_list_2):
         r1.append(result)
 
     for m in range(len(base_name_list_2)):
-        temp_list = [ [atom_list[x].atom_coor_x*10, atom_list[x].atom_coor_y*10,atom_list[x].atom_coor_z*10] \
+        temp_list = [ [atom_list[x-1].atom_coor_x*10, atom_list[x-1].atom_coor_y*10,atom_list[x-1].atom_coor_z*10] \
                 for x in base_atom_list_2[m] ]
 #        print temp_list
         result = DNA_matrix.Get_rotate_matrix(numpy.array(temp_list), base_name_list_2[m][0])
@@ -286,7 +267,7 @@ def Get_RMSD_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1, dt=1,b
     LIST_NUM=len(base_list)
 
     
-    Atom_list=Simple_atom.Get_Simple_atom_list(coor_file)
+    Atom_list=Simple_atom.Get_atom_list(coor_file)
     residue_list=Simple_atom.Get_Residue_list(Atom_list)
     
     base_name_list=list()
@@ -382,7 +363,7 @@ def Get_RMSD_fromTOP(coor_file, base_list):
     '''
     LIST_NUM=len(base_list)
 
-    atom_list=Simple_atom.Get_Simple_atom_list(traj_file)
+    atom_list=Simple_atom.Get_atom_list(traj_file)
     residue_list=Simple_atom.Get_Segment_list(atom_list)
 
     base_name_list=list()
