@@ -167,6 +167,12 @@ def Get_Area_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1,dt=1,be
                 # print area
             
                 # print "area=%f" %area
+                if ts.frame % 10 ==0 and i==0:
+                    NOW_TIME=Time.time()
+                    if time < 1000:
+                        usage.echo("  analysis frame %6d, time %8.1f ps, time used %8.2f s\r" %(ts.frame, time,NOW_TIME-START_TIME))
+                    elif time > 1000 and ts.frame %200 == 0:
+                        usage.echo("  analysis frame %6d, time %8.2f ns, time used %8.2f s\r" %(ts.frame, time/1000,NOW_TIME-START_TIME))
 
                 fp = open(output_name[i], 'a')
                 fp.write( " %7.4f\t  %6.3f\n" %(time/1000, area))
