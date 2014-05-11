@@ -25,6 +25,7 @@ import os
 from G4Analysis import Simple_atom
 from G4Analysis import G4_rise
 from G4Analysis import G4_twist
+from G4Analysis import G4_Area
 from G4Analysis import usage
 from G4Analysis import DNA_analysis
 from G4Analysis.Coor import atomlib
@@ -32,7 +33,7 @@ from G4Analysis.Coor import atomlib
 def Usage(coor_file="coor_file",traj_file="traj_file",output_file="output_file",\
         parm_file="para_analysis.in",skip=1,show_help="yes",\
         calcu_helical="False", calcu_dihedral="False",\
-        calcu_rise="False",calcu_twist="False",calcu_rmsd="False",begin=0,end=-1):
+        calcu_rise="False",calcu_twist="False",calcu_rmsd="False",calcu_area="False",begin=0,end=-1):
     '''
     print the usage information.
     '''
@@ -53,6 +54,7 @@ def Usage(coor_file="coor_file",traj_file="traj_file",output_file="output_file",
     usage.Show("--rise","bool",calcu_rise,"Calculate the distance of DNA bases groups.")
     usage.Show("--twist","bool",calcu_twist,"Calculate the twist of DNA bases groups.")
     usage.Show("--rmsd","bool",calcu_rmsd,"Calculate the RMSD of DNA bases groups.")
+    usage.Show("--area","bool",calcu_area,"Calculate the area of four O6 atoms of the G-quartet.")
     usage.Show("--begin","int",begin,"First frame (ps) to read from trajectory.")
     usage.Show("--end","int",end,"Last frame (ps) to read from trajectory.")
     usage.Show_skip(skip)
@@ -72,8 +74,10 @@ def Check_argv(argv):
     calcu_rmsd=False
     calcu_rise=False
     calcu_twist=False
+    calcu_area = False
     calcu_helical=False
     calcu_dihedral=False
+
     begin=1
     end=-1
 
@@ -82,7 +86,7 @@ def Check_argv(argv):
         sys.exit()
 
     try:
-        opts,args=getopt.getopt(sys.argv[1:],"p:f:o:i:h",["skip=","begin=","end=","rmsd","rise","twist","dihedral","helical"])
+        opts,args=getopt.getopt(sys.argv[1:],"p:f:o:i:h",["skip=","begin=","end=","rmsd","rise","twist","area","dihedral","helical"])
     except getopt.GetoptError,e:
         print e
         sys.exit()
@@ -111,6 +115,9 @@ def Check_argv(argv):
 
         elif a=="--twist":
             calcu_twist=True
+
+        elif a == "--area":
+            calcu_area = True
 
         elif a=="--dihedral":
             calcu_dihedral=True
@@ -156,7 +163,7 @@ def Check_argv(argv):
 
     Usage(coor_file,traj_file,output_file,parm_file,skip,"no",\
             calcu_helical,calcu_dihedral,\
-            calcu_rise,calcu_twist,calcu_rmsd,begin,end)
+            calcu_rise,calcu_twist,calcu_rmsd,calcu_area,begin,end)
 
     return resu_hash
 
@@ -307,6 +314,28 @@ if __name__=="__main__":
         G4_rise.Get_RMSD_fromTRJ(resu["traj_file"],resu["coor_file"],\
                 list_group_1,list_output,resu["skip"],\
                 begin=resu["begin"],end=resu["end"])
+
+# step add. calculating the area of O6 of G-quartet.
+    if resu["calcu_area"]==True:
+        if have_parm_file:
+            fp=open(resu["parm_file"])
+            lines=fp.readlines()
+            for line in lines:
+                [group1,outputname]=line.split()
+                g1=group1.split(":")
+                list_group_1.append([int(i) for i in g1])
+                list_output.append(outputname)
+
+        else:
+            l1=Simple_atom.Get_residue(resu["coor_file"],True)
+            list_group_1.append(l1)
+            list_output.append(resu["output_file"])
+
+
+        print list_output
+        G4_Area.Get_Area_fromTRJ(resu["traj_file"],resu["coor_file"],\
+                list_group_1,list_output,resu["skip"],\
+                begin=resu["begin"],end=resu["end"])        
 
 # step 5, calculating the helical parameters.
     if resu["calcu_helical"]==True:
