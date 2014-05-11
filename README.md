@@ -23,23 +23,23 @@ Option|Type|Filename|Description
 -f       | Input |  traj_file   | Trajectory: xtc trr.
 -o       | Input |  output_file | xvgr/xmgr file.
 -i       | Input |  para_an.in  | input parmarter file.
-------|----|--------|-----------
+
 
 **Other options**
 
-==========    ======    ===========  ==============================================================
-Option          Type    Value        Description
-==========    ======    ===========  ==============================================================
---helical       bool    False 	     Calculate the helical parameters of nucleic acids.
---dihedral      bool    False 	     Calculate the backbone dihedral parameters of nucleic acids.
---rise          bool    False        Calculate the distance of DNA bases groups.
---twist         bool    False        Calculate the twist of DNA bases groups.
---rmsd          bool    False        skip Calculate the RMSD of DNA bases groups.
---begin         int     0            First frame (ps) to read from trajectory.
---end           int     -1           Last frame (ps) to read from trajectory.
---skip          int     1            Get frames when frame MOD skip = 0
--h              bool    yes          Print help info and quit
-==========    ======    ===========  ==============================================================
+
+Option       |   Type  |  Value  |      Description
+------|----|--------|-----------
+--helical    |   bool  |  False 	|     Calculate the helical parameters of nucleic acids.
+--dihedral   |   bool  |  False 	|     Calculate the backbone dihedral parameters of nucleic acids.
+--rise       |   bool  |  False  |      Calculate the distance of DNA bases groups.
+--twist      |   bool  |  False  |      Calculate the twist of DNA bases groups.
+--rmsd       |   bool  |  False  |      skip Calculate the RMSD of DNA bases groups.
+--begin      |   int   |  0      |      First frame (ps) to read from trajectory.
+--end        |   int   |  -1     |      Last frame (ps) to read from trajectory.
+--skip       |   int   |  1      |      Get frames when frame MOD skip = 0
+-h           |   bool  |  yes    |      Print help info and quit
+
 
 Two modes to use this program.
 
