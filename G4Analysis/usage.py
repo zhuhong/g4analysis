@@ -6,7 +6,7 @@ Created on 2011-03-05
 '''
 import sys
 
-version="0.1.0"
+version="0.2.0"
 
 def File_input():
     print "Option \t %6s  %20s    %10s " %("Type","Filename","Description")
