@@ -19,11 +19,11 @@ Usage
 
 Option|Type|Filename|Description
 ------|----|--------|-----------
--p        Input   coor_file    Structure fie: gro pdb etc.
--f        Input   traj_file    Trajectory: xtc trr.
--o        Input   output_file  xvgr/xmgr file.
--i        Input   para_an.in   input parmarter file.
-========  ======  ===========  ================================
+-p       | Input |  coor_file   | Structure fie: gro pdb etc.
+-f       | Input |  traj_file   | Trajectory: xtc trr.
+-o       | Input |  output_file | xvgr/xmgr file.
+-i       | Input |  para_an.in  | input parmarter file.
+------|----|--------|-----------
 
 **Other options**
 
