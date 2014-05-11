@@ -156,6 +156,7 @@ def Check_argv(argv):
     resu_hash["calcu_rmsd"]=calcu_rmsd
     resu_hash["calcu_rise"]=calcu_rise
     resu_hash["calcu_twist"]=calcu_twist
+    resu_hash["calcu_area"] = calcu_area
     resu_hash["calcu_dihedral"]=calcu_dihedral
     resu_hash["calcu_helical"]=calcu_helical
     resu_hash["begin"]=begin
