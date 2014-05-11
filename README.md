@@ -16,9 +16,9 @@ Usage
 
 **Files**
 
-========  ======  ===========  ================================
-Option    Type    Filename     Description
-========  ======  ===========  ================================
+
+Option|Type|Filename|Description
+------|----|--------|-----------
 -p        Input   coor_file    Structure fie: gro pdb etc.
 -f        Input   traj_file    Trajectory: xtc trr.
 -o        Input   output_file  xvgr/xmgr file.
