@@ -363,7 +363,7 @@ def Get_RMSD_fromTOP(coor_file, base_list):
     '''
     LIST_NUM=len(base_list)
 
-    atom_list=Simple_atom.Get_atom_list(traj_file)
+    atom_list=Simple_atom.Get_atom_list(coor_file)
     residue_list=Simple_atom.Get_Segment_list(atom_list)
 
     base_name_list=list()
