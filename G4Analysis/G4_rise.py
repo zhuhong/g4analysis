@@ -350,7 +350,7 @@ def Get_RMSD_fromTRJ(traj_file, coor_file, base_list, output_name,skip=1, dt=1,b
                     NOW_TIME=Time.time()
                     usage.echo("  analysis frame %6d, time %8.1f ps, time used %8.2f s\r" %(ts.frame, time,NOW_TIME-START_TIME))
                 fp=open(output_name[i], 'a')
-                fp.write( " %7.4f\t  %6.4f\n" %(time/1000,RMSD))
+                fp.write( " %7.4f\t  %6.4f\n" %(time/1000.,RMSD))
                 fp.close()
 
     print "Finished calculating the RMSD."
