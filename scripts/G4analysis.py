@@ -42,7 +42,7 @@ def Usage(coor_file="coor_file",traj_file="traj_file",output_file="output_file",
     usage.Print_line()
     usage.Coor_file(coor_file,"Input")
     usage.Traj_file(traj_file,"Input")
-    usage.Xvgr_file(output_file,"Input")
+    usage.Xvgr_file(output_file,"Output")
     usage.Parm_file(parm_file,"Input")
     usage.Print_line()
     print ""
